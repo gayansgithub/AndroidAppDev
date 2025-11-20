@@ -1,0 +1,46 @@
+activity_main.xml ...........................
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="20dp">
+
+    <Button
+        android:id="@+id/btnOpenWebsite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Open Google Website" />
+
+</LinearLayout>
+
+
+MainActivity.kt .......................................
+
+package com.example.implicitintentdemo
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.content.Intent
+import android.net.Uri
+import android.widget.Button
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val btnOpenWebsite = findViewById<Button>(R.id.btnOpenWebsite)
+
+        btnOpenWebsite.setOnClickListener {
+            // Implicit Intent to open a webpage
+            val url = Uri.parse("https://www.google.com")
+            val intent = Intent(Intent.ACTION_VIEW, url)
+            startActivity(intent)
+        }
+    }
+}
+
