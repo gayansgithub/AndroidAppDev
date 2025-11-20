@@ -1,0 +1,192 @@
+activity_main.xml .........................................
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:gravity="center">
+
+    <Button
+        android:id="@+id/btnBMI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to BMI Calculator" />
+
+    <Button
+        android:id="@+id/btnCurrency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Go to Currency Converter"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+MainActivity.kt ...........................................
+
+package com.example.healthfinancehelper
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.content.Intent
+import android.widget.Button
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val btnBMI = findViewById<Button>(R.id.btnBMI)
+        val btnCurrency = findViewById<Button>(R.id.btnCurrency)
+
+        btnBMI.setOnClickListener {
+            startActivity(Intent(this, BMIActivity::class.java))
+        }
+
+        btnCurrency.setOnClickListener {
+            startActivity(Intent(this, CurrencyActivity::class.java))
+        }
+    }
+}
+
+activity_bmi.xml ........................................
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Weight (kg)"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/etWeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Weight" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Height (m)"
+        android:textSize="18sp"
+        android:paddingTop="10dp"/>
+
+    <EditText
+        android:id="@+id/etHeight"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter Height" />
+
+    <Button
+        android:id="@+id/btnCalculateBMI"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Calculate BMI"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+BMIActivity.kt ...............................................................
+
+package com.example.healthfinancehelper
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+
+class BMIActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_bmi)
+
+        val etWeight = findViewById<EditText>(R.id.etWeight)
+        val etHeight = findViewById<EditText>(R.id.etHeight)
+        val btnCalc = findViewById<Button>(R.id.btnCalculateBMI)
+
+        btnCalc.setOnClickListener {
+            val w = etWeight.text.toString().toFloatOrNull()
+            val h = etHeight.text.toString().toFloatOrNull()
+
+            if (w != null && h != null && h > 0) {
+                val bmi = w / (h * h)
+                Toast.makeText(this, "Your BMI is: %.2f".format(bmi), Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Invalid Input!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
+
+activity_currency.xml .....................................
+
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Amount in LKR"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/etLKR"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter LKR amount" />
+
+    <Button
+        android:id="@+id/btnConvert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Convert to EURO"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>
+
+CurrencyActivity.kt ..........................................
+
+package com.example.healthfinancehelper
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+
+class CurrencyActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_currency)
+
+        val etLKR = findViewById<EditText>(R.id.etLKR)
+        val btnConvert = findViewById<Button>(R.id.btnConvert)
+
+        btnConvert.setOnClickListener {
+            val lkr = etLKR.text.toString().toFloatOrNull()
+
+            if (lkr != null) {
+                val euroRate = 350f
+                val euro = lkr / euroRate
+                Toast.makeText(this, "Amount in EURO: %.2f".format(euro), Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "Invalid Input!", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+}
