@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Country List"
+        android:textSize="22sp"
+        android:layout_gravity="center"
+        android:padding="8dp"/>
+
+    <ListView
+        android:id="@+id/listViewCountries"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</LinearLayout>
+
+package com.example.listviewexample
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.ArrayAdapter
+import android.widget.ListView
+import android.widget.Toast
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val listView: ListView = findViewById(R.id.listViewCountries)
+
+        // Sample data
+        val countries = arrayOf("Sri Lanka", "India", "Japan", "USA", "UK", "Australia")
+
+        // Adapter connects data to ListView
+        val adapter = ArrayAdapter(
+            this,
+            android.R.layout.simple_list_item_1,
+            countries
+        )
+
+        listView.adapter = adapter
+
+        // Click event
+        listView.setOnItemClickListener { _, _, position, _ ->
+            val selectedCountry = countries[position]
+            Toast.makeText(this, "You selected: $selectedCountry", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
