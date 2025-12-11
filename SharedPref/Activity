@@ -1,0 +1,74 @@
+package com.example.sharedprefsdemo
+
+import android.content.Context
+import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+
+class MainActivity : AppCompatActivity() {
+
+    private val PREFS_NAME = "MyPrefs"
+    private val KEY_NAME = "username"
+    private val KEY_MOBILE = "mobile"
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val etName = findViewById<EditText>(R.id.etName)
+        val etMobile = findViewById<EditText>(R.id.etMobile)
+        val btnSave = findViewById<Button>(R.id.btnSave)
+        val btnLoad = findViewById<Button>(R.id.btnLoad)
+        val btnClear = findViewById<Button>(R.id.btnClear)
+        val tvSaved = findViewById<TextView>(R.id.tvSaved)
+
+        val prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+
+        // ----------------------------
+        // SAVE DATA ONLY
+        // ----------------------------
+        btnSave.setOnClickListener {
+            val name = etName.text.toString().trim()
+            val mobile = etMobile.text.toString().trim()
+
+            val editor = prefs.edit()
+            editor.putString(KEY_NAME, name)
+            editor.putString(KEY_MOBILE, mobile)
+            editor.apply()
+
+            // Do NOT show data here
+            tvSaved.text = "Data Saved."
+        }
+
+
+        // ----------------------------
+        // LOAD DATA AND DISPLAY IN TEXTVIEW
+        // ----------------------------
+        btnLoad.setOnClickListener {
+            val name = prefs.getString(KEY_NAME, "")
+            val mobile = prefs.getString(KEY_MOBILE, "")
+
+            if (name.isNullOrEmpty() && mobile.isNullOrEmpty()) {
+                tvSaved.text = "No saved data found."
+            } else {
+                tvSaved.text = "Saved Data:\nName: $name\nMobile: $mobile"
+            }
+        }
+
+
+        // ----------------------------
+        // CLEAR DATA
+        // ----------------------------
+        btnClear.setOnClickListener {
+            prefs.edit().clear().apply()
+
+            etName.text.clear()
+            etMobile.text.clear()
+
+            tvSaved.text = "Data Cleared."
+        }
+    }
+}
