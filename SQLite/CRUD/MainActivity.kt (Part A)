@@ -1,0 +1,47 @@
+package com.example.cricketsqlitecrud
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.widget.*
+
+class MainActivity : AppCompatActivity() {
+
+    lateinit var dbHelper: DBHelper
+    lateinit var tvResult: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        dbHelper = DBHelper(this)
+        tvResult = findViewById(R.id.tvResult)
+
+        val etName = findViewById<EditText>(R.id.etName)
+        val etTeam = findViewById<EditText>(R.id.etTeam)
+        val etRuns = findViewById<EditText>(R.id.etRuns)
+
+        findViewById<Button>(R.id.btnAdd).setOnClickListener {
+            val success = dbHelper.insertPlayer(
+                etName.text.toString(),
+                etTeam.text.toString(),
+                etRuns.text.toString().toInt()
+            )
+            Toast.makeText(this, if (success) "Player Added" else "Failed", Toast.LENGTH_SHORT).show()
+        }
+
+        findViewById<Button>(R.id.btnView).setOnClickListener {
+            val cursor = dbHelper.getAllPlayers()
+            val buffer = StringBuilder()
+
+            while (cursor.moveToNext()) {
+                buffer.append("ID: ${cursor.getInt(0)}\n")
+                buffer.append("Name: ${cursor.getString(1)}\n")
+                buffer.append("Team: ${cursor.getString(2)}\n")
+                buffer.append("Runs: ${cursor.getInt(3)}\n\n")
+            }
+
+            tvResult.text = buffer.toString()
+            cursor.close()
+        }
+    }
+}
