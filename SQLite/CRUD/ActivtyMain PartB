@@ -1,0 +1,17 @@
+<EditText
+    android:id="@+id/etId"
+    android:hint="Player ID (for Update/Delete)"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
+<Button
+    android:id="@+id/btnUpdate"
+    android:text="Update Player"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
+
+<Button
+    android:id="@+id/btnDelete"
+    android:text="Delete Player"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"/>
