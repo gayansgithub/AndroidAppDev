@@ -1,0 +1,25 @@
+// UPDATE
+fun updatePlayer(id: String, name: String, team: String, runs: Int): Boolean {
+    val values = ContentValues()
+    values.put(COL_NAME, name)
+    values.put(COL_TEAM, team)
+    values.put(COL_RUNS, runs)
+
+    val result = writableDatabase.update(
+        TABLE_NAME,
+        values,
+        "$COL_ID = ?",
+        arrayOf(id)
+    )
+    return result > 0
+}
+
+// DELETE
+fun deletePlayer(id: String): Boolean {
+    val result = writableDatabase.delete(
+        TABLE_NAME,
+        "$COL_ID = ?",
+        arrayOf(id)
+    )
+    return result > 0
+}
