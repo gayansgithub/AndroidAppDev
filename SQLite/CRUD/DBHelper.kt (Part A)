@@ -1,0 +1,51 @@
+package com.example.cricketsqlitecrud
+
+import android.content.ContentValues
+import android.content.Context
+import android.database.Cursor
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteOpenHelper
+
+class DBHelper(context: Context) :
+    SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+
+    companion object {
+        private const val DATABASE_NAME = "cricket_db"
+        private const val DATABASE_VERSION = 1
+
+        private const val TABLE_NAME = "players"
+        private const val COL_ID = "id"
+        private const val COL_NAME = "name"
+        private const val COL_TEAM = "team"
+        private const val COL_RUNS = "runs"
+    }
+
+    override fun onCreate(db: SQLiteDatabase) {
+        val createTable =
+            "CREATE TABLE $TABLE_NAME (" +
+                    "$COL_ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    "$COL_NAME TEXT, " +
+                    "$COL_TEAM TEXT, " +
+                    "$COL_RUNS INTEGER)"
+        db.execSQL(createTable)
+    }
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
+        db.execSQL("DROP TABLE IF EXISTS $TABLE_NAME")
+        onCreate(db)
+    }
+
+    // CREATE
+    fun insertPlayer(name: String, team: String, runs: Int): Boolean {
+        val values = ContentValues()
+        values.put(COL_NAME, name)
+        values.put(COL_TEAM, team)
+        values.put(COL_RUNS, runs)
+        return writableDatabase.insert(TABLE_NAME, null, values) != -1L
+    }
+
+    // READ
+    fun getAllPlayers(): Cursor {
+        return readableDatabase.rawQuery("SELECT * FROM $TABLE_NAME", null)
+    }
+}
